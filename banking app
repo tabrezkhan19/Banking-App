@@ -1,0 +1,147 @@
+namespace Bankingapp
+{
+    class BankAccount
+    {
+        private string accountHolder;
+        private string accountNumber;
+        private decimal balance;
+
+        public BankAccount(string holderName, string accNumber, decimal initialDeposit)
+        {
+            accountHolder = holderName;
+            accountNumber = accNumber;
+            balance = initialDeposit > 0 ? initialDeposit : 0;
+        }
+
+        public void Deposit(decimal amount)
+        {
+            if (amount <= 0)
+            {
+                Console.WriteLine("invalid input...");
+            }
+            else
+            {
+                balance += amount;
+                Console.WriteLine($"{amount} is successfully deposited...");
+            }
+        }
+
+        public void WithDraw(decimal amount)
+        {
+            if (amount >= balance)
+            {
+                Console.WriteLine("insufficient balance...");
+            }
+            else if (amount <= 0)
+            {
+                Console.WriteLine("invalid input....");
+            }
+            else
+            {
+                balance -= amount;
+                Console.WriteLine($"{amount} is successfully withdrawn...");
+            }
+        }
+
+        public void DisplayBalance()
+        {
+            Console.WriteLine($"current balance : {balance}");
+        }
+
+        public void ShowDetails()
+        {
+            Console.WriteLine("==== Account Details ====");
+            Console.WriteLine($"Account Holder: {accountHolder}");
+            Console.WriteLine($"Account Number: {accountNumber}");
+            Console.WriteLine($"Available Balance: ₹{balance}");
+        }
+
+    }
+
+
+    class Program 
+{
+    static void Main()
+    {
+        Console.WriteLine("==== Welcome to Tabrez Bank 💰 ====");
+
+        Console.WriteLine("enter your name");
+        string name = Console.ReadLine();
+
+        Console.WriteLine("enter your bank account...");
+        string accNo = Console.ReadLine();
+
+        Console.WriteLine("enter initial deposit amount...");
+        decimal initialDeposit;
+
+        while (!decimal.TryParse(Console.ReadLine(), out initialDeposit))
+        {
+            Console.WriteLine("invalid input...enter again");
+        }
+
+        BankAccount userAccount = new BankAccount(name, accNo, initialDeposit);
+        Console.WriteLine("account created successfully...");
+
+        bool exit = false;
+
+        while (!exit)
+        {
+            Console.WriteLine("\n==== MENU ====");
+            Console.WriteLine("1. Deposit");
+            Console.WriteLine("2. Withdraw");
+            Console.WriteLine("3. Show Balance");
+            Console.WriteLine("4. Account Details");
+            Console.WriteLine("5. Exit");
+            Console.Write("Choose an option: ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("Enter amount to deposit: ₹");
+                    decimal depAmt;
+                    if (decimal.TryParse(Console.ReadLine(), out depAmt))
+                    {
+                        userAccount.Deposit(depAmt);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid amount.");
+                    }
+                    break;
+
+                case "2":
+                    Console.Write("Enter amount to withdraw: ₹");
+                    decimal withAmt;
+                    if (decimal.TryParse(Console.ReadLine(), out withAmt))
+                    {
+                        userAccount.WithDraw(withAmt);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid amount.");
+                    }
+                    break;
+
+                case "3":
+                    userAccount.DisplayBalance();
+                    break;
+
+                case "4":
+                    userAccount.ShowDetails();
+                    break;
+
+                case "5":
+                    exit = true;
+                    Console.WriteLine("Thank you for banking with us! 🙏");
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please select 1-5.");
+                    break;
+            }
+        }
+    }
+}
+}
